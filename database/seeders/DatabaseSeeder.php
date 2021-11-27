@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use DateTime;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -23,9 +24,12 @@ class DatabaseSeeder extends Seeder
      */
     private function generateSprints(): void
     {
-        $sprints = [];
+        DB::table('tasks')->truncate();
+        DB::table('sprints')->truncate();
 
-        $initialDate = date('Y-m-d H:i:s');
+        $sprints = [];
+        $initialDate = '2021-11-27 09:00:00';
+        $taskKeyCount = 1;
         foreach (range(0, 30) as $count) {
             foreach (range(1,2) as $part) {
                 if ($part === 2) {
@@ -56,12 +60,11 @@ class DatabaseSeeder extends Seeder
                 ];
 
                 if ($part === 1) {
-                    $this->generateTasks($sprintKey, $initialDate);
+                    $this->generateTasks($sprintKey, $initialDate, $taskKeyCount);
                 }
             }
         }
 
-        DB::table('sprints')->truncate();
         DB::table('sprints')->insert($sprints);
     }
 
@@ -71,38 +74,191 @@ class DatabaseSeeder extends Seeder
      * @return void
      * @throws \Exception
      */
-    private function generateTasks(string $sprintKey, string $sprintStartDate): void
+    private function generateTasks(string $sprintKey, string $sprintStartDate, int &$taskKeyCount): void
     {
         $tasks = [];
 
-        $taskKeyCount = 1;
         foreach ($this->getUsers() as $userName) {
-            foreach ($this->getPossibleStoryPointsArrangement() as $storyPointsForTask) {
-                $tasks[] = [
-                    'event' => 'jira:issue_updated',
-                    'sprint_key' => $sprintKey,
-                    'task_key' => "MV-{$taskKeyCount}",
-                    'task_url' => "https://jira.atlassian.com/rest/api/2/issue/{$sprintKey}",
-                    'task_dev_sp' => $storyPointsForTask,
-                    'task_qa_sp' => $this->getQaSpForTaskSp($storyPointsForTask),
-                    'task_type' => "issue",
-                    'task_created_at' => "",
-                    'changed_field' => 'issuestatus',
-                    'changed_from' => $changeFrom,
-                    'changed_to' => $changeTO,
-                    'author_email' => "{$userName}@gmail.com",
-                    'author_url' => "https://jira.atlassian.com/rest/api/2/user?username={$userName}",
-                    'author_key' => $userName,
-                    'timestamp' => $initialDate,
-                    'created_at' => $initialDate,
-                    'updated_at' => $initialDate,
-                ];
-                $taskKeyCount++;
+            $tasksForSprint = $this->getPossibleStoryPointsArrangement();
+            shuffle($tasksForSprint);
+
+            foreach ($tasksForSprint as $storyPointsForTask) {
+                $taskKey = "MV-{$taskKeyCount}";
+                foreach ($this->getTaskHistory($storyPointsForTask, $sprintStartDate) as $taskEvent) {
+                    $tasks[] = [
+                        'event' => 'jira:issue_updated',
+                        'sprint_key' => $sprintKey,
+                        'sprint_started_at' => $sprintStartDate,
+                        'task_key' => $taskKey,
+                        'task_url' => "https://jira.atlassian.com/rest/api/2/issue/{$sprintKey}",
+                        'task_dev_sp' => $taskEvent['task_dev_sp'],
+                        'task_qa_sp' => $this->getQaSpForTaskSp($storyPointsForTask),
+                        'task_type' => "issue",
+                        'task_created_at' => $taskEvent['task_created_at'],
+                        'changed_field' => 'issuestatus',
+                        'changed_from' => $taskEvent['statusFrom'],
+                        'changed_to' => $taskEvent['statusTo'],
+                        'author_email' => "{$userName}@gmail.com",
+                        'author_url' => "https://jira.atlassian.com/rest/api/2/user?username={$userName}",
+                        'author_key' => $userName,
+                        'timestamp' => null,
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ];
+                    $taskKeyCount++;
+                }
             }
         }
 
-        DB::table('tasks')->truncate();
         DB::table('tasks')->insert($tasks);
+    }
+
+    /**
+     * @param int $taskStoryPoints
+     * @param string $sprintStartDate
+     * @return \Generator
+     */
+    private function getTaskHistory(int $taskStoryPoints, string $sprintStartDate)
+    {
+        $lastValue = 'Backlog';
+        $taskCreatedAt = $this->getRandomTaskCreatedAt($sprintStartDate);
+
+        foreach ($this->getTaskStatuses() as $status) {
+            yield [
+                'task_dev_sp' => $taskStoryPoints,
+                'task_created_at' => $taskCreatedAt,
+                'statusFrom' => $lastValue,
+                'statusTo' => $status,
+            ];
+            $lastValue = $status;
+        }
+    }
+
+    /**
+     * @param string $sprintStartDate
+     * @return false|string
+     * @throws \Exception
+     */
+    private function getRandomTaskCreatedAt(string $sprintStartDate): string
+    {
+        $days = random_int(1, 60);
+        return date('Y-m-d H:i:s', strtotime('-' . $days . ' day', strtotime($sprintStartDate)));
+    }
+
+    /**
+     * @param int $sp
+     * @return string
+     * @throws \Exception
+     */
+    private function getTaskStartedAtForPoints(int $sp, $taskStartedAt): string
+    {
+        switch ($sp) {
+            case 13:
+                $hours = 52;
+                break;
+            case 8:
+                $hours = 32;
+                break;
+            case 5:
+                $hours = 20;
+                break;
+            case 3:
+                $hours = 12;
+                break;
+            case 2:
+                $hours = 8;
+                break;
+            case 1:
+            default:
+                $hours = 4;
+                break;
+        }
+
+        $start = new DateTime($taskStartedAt);
+
+        foreach (range(0,500) as $tryHours) {
+            $end = isset($end)
+                ? date('Y-m-d H:i:s', strtotime('+1 hours', strtotime($end)))
+                : date('Y-m-d H:i:s', strtotime('+1 hours', strtotime($taskStartedAt)));
+            $endObj = new DateTime($end);
+            $res = $this->getWorkingHours($start, $endObj, self::getWorkingHoursArray());
+
+            if ($res === $hours) {
+                return $end;
+            }
+        }
+
+        throw new \RuntimeException('ERROR');
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getTaskStatuses(): array
+    {
+        //TODO: Backlog -> Todo -> Blocked -> InProgress -> Autotesting -> ForReview -> InReview
+        // -> ForTesting -> InTesting -> ForBuild -> InBuild -> BuildTesting -> ProdTesting -> Done
+        return [
+//            'Backlog',
+            'Todo',
+//            'Blocked',
+            'InProgress',
+            'Autotesting',
+            'ForReview',
+            'InReview',
+            'ForTesting',
+            'InTesting',
+            'ForBuild',
+            'InBuild',
+            'BuildTesting',
+            'ProdTesting',
+            'Done',
+        ];
+    }
+
+    /**
+     * @param DateTime $start
+     * @param DateTime $end
+     * @param array $working_hours
+     * @return int|mixed
+     */
+    function getWorkingHours(DateTime $start, DateTime $end, array $working_hours)
+    {
+        $seconds = 0; // Total working seconds
+
+        // Calculate the Start Date (Midnight) and Time (Seconds into day) as Integers.
+        $start_date = clone $start;
+        $start_date = $start_date->setTime(0, 0, 0)->getTimestamp();
+        $start_time = $start->getTimestamp() - $start_date;
+
+        // Calculate the Finish Date (Midnight) and Time (Seconds into day) as Integers.
+        $end_date = clone $end;
+        $end_date = $end_date->setTime(0, 0, 0)->getTimestamp();
+        $end_time = $end->getTimestamp() - $end_date;
+
+        // For each Day
+        for ($today = $start_date; $today <= $end_date; $today += 86400) {
+
+            // Get the current Weekday.
+            $today_weekday = date('w', $today);
+
+            // Skip to next day if no hours set for weekday.
+            if (!isset($working_hours[$today_weekday][0]) || !isset($working_hours[$today_weekday][1])) continue;
+
+            // Set the office hours start/finish.
+            $today_start = $working_hours[$today_weekday][0];
+            $today_end = $working_hours[$today_weekday][1];
+
+            // Adjust Start/Finish times on Start/Finish Day.
+            if ($today === $start_date) $today_start = min($today_end, max($today_start, $start_time));
+            if ($today === $end_date) $today_end = max($today_start, min($today_end, $end_time));
+
+            // Add to total seconds.
+            $seconds += $today_end - $today_start;
+
+        }
+
+        return $seconds / 60 / 60;
     }
 
     /**
@@ -130,10 +286,6 @@ class DatabaseSeeder extends Seeder
             [8,2,1,1,1,1,2],
             [8,5,1,1,1],
         ];
-
-        foreach ($possibleOptions as $option) {
-            dump(array_sum($option));
-        }
 
         $randomKey = random_int(0,count($possibleOptions)-1);
         return $possibleOptions[$randomKey];
@@ -173,5 +325,21 @@ class DatabaseSeeder extends Seeder
             default:
                 return 0;
         }
+    }
+
+    /**
+     * @return array
+     */
+    private static function getWorkingHoursArray(): array
+    {
+        return [
+            null,
+            [9*60*60,17*60*60,],
+            [9*60*60,17*60*60,],
+            [9*60*60,17*60*60,],
+            [9*60*60,17*60*60,],
+            [9*60*60,17*60*60,],
+            null,
+        ];
     }
 }

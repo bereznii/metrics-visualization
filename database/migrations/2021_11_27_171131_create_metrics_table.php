@@ -31,12 +31,13 @@ class CreateMetricsTable extends Migration
             $table->id();
             $table->string('event')->nullable(); //webhookEvent
             $table->string('sprint_key')->nullable(); //issue.sprint
+            $table->dateTime('sprint_started_at')->nullable(); //issue.sprint
             $table->string('task_key')->nullable(); //issue.key
             $table->string('task_url')->nullable(); //issue.self
-            $table->string('task_dev_sp')->nullable(); //issue.fields.devStoryPoints
-            $table->string('task_qa_sp')->nullable(); //issue.fields.qaStoryPoints
+            $table->integer('task_dev_sp')->nullable(); //issue.fields.devStoryPoints
+            $table->integer('task_qa_sp')->nullable(); //issue.fields.qaStoryPoints
             $table->string('task_type')->nullable(); //issue.fields.type
-            $table->string('task_created_at')->nullable(); //issue.fields.created
+            $table->dateTime('task_created_at')->nullable(); //issue.fields.created
             $table->string('changed_field')->nullable(); //changelog.items.*.field
             $table->string('changed_from')->nullable(); //changelog.items.*.fromString
             $table->string('changed_to')->nullable(); //changelog.items.*.toString
