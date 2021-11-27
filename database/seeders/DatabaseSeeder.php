@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
+    private const DEV_STATUSES = [
+        'InProgress',
+        'Autotesting',
+        'ForReview',
+        'InReview',
+        'ForTesting',
+    ];
+
     /**
      * Seed the application's database.
      *
@@ -30,6 +38,7 @@ class DatabaseSeeder extends Seeder
         $sprints = [];
         $initialDate = '2021-11-27 09:00:00';
         $taskKeyCount = 1;
+//        foreach (range(0, 0) as $count) {
         foreach (range(0, 30) as $count) {
             foreach (range(1,2) as $part) {
                 if ($part === 2) {
@@ -85,6 +94,10 @@ class DatabaseSeeder extends Seeder
             foreach ($tasksForSprint as $storyPointsForTask) {
                 $taskKey = "MV-{$taskKeyCount}";
                 foreach ($this->getTaskHistory($storyPointsForTask, $sprintStartDate) as $taskEvent) {
+                    $statusUser = in_array($taskEvent['statusTo'], self::DEV_STATUSES)
+                        ? $userName
+                        : 'lisa';
+
                     $tasks[] = [
                         'event' => 'jira:issue_updated',
                         'sprint_key' => $sprintKey,
@@ -98,12 +111,10 @@ class DatabaseSeeder extends Seeder
                         'changed_field' => 'issuestatus',
                         'changed_from' => $taskEvent['statusFrom'],
                         'changed_to' => $taskEvent['statusTo'],
-                        'author_email' => "{$userName}@gmail.com",
-                        'author_url' => "https://jira.atlassian.com/rest/api/2/user?username={$userName}",
-                        'author_key' => $userName,
-                        'timestamp' => null,
-                        'created_at' => null,
-                        'updated_at' => null,
+                        'author_email' => "{$statusUser}@gmail.com",
+                        'author_url' => "https://jira.atlassian.com/rest/api/2/user?username={$statusUser}",
+                        'author_key' => $statusUser,
+                        'timestamp' => $taskEvent['timestamp'],
                     ];
                     $taskKeyCount++;
                 }
@@ -117,63 +128,187 @@ class DatabaseSeeder extends Seeder
      * @param int $taskStoryPoints
      * @param string $sprintStartDate
      * @return \Generator
+     * @throws \Exception
      */
     private function getTaskHistory(int $taskStoryPoints, string $sprintStartDate)
     {
-        $lastValue = 'Backlog';
+        $lastValue = 'ToDo';
         $taskCreatedAt = $this->getRandomTaskCreatedAt($sprintStartDate);
 
         foreach ($this->getTaskStatuses() as $status) {
+            $timestamp = $this->addWorkingHours($taskStoryPoints, $status);
             yield [
                 'task_dev_sp' => $taskStoryPoints,
                 'task_created_at' => $taskCreatedAt,
                 'statusFrom' => $lastValue,
                 'statusTo' => $status,
+                'timestamp' => $timestamp,
             ];
             $lastValue = $status;
         }
     }
 
     /**
-     * @param string $sprintStartDate
-     * @return false|string
-     * @throws \Exception
+     * @param int $taskStoryPoints
+     * @param string $status
+     * @return int
      */
-    private function getRandomTaskCreatedAt(string $sprintStartDate): string
+    private function addWorkingHours(int $taskStoryPoints, string $status): ?int
     {
-        $days = random_int(1, 60);
-        return date('Y-m-d H:i:s', strtotime('-' . $days . ' day', strtotime($sprintStartDate)));
+        switch ($taskStoryPoints) {
+            case 13: //dev 52 hours
+                switch ($status) {
+                    case 'Autotesting':
+                        return rand(49,52);
+                    case 'InProgress':
+                    case 'ForReview':
+                    case 'InReview':
+                    case 'ForTesting':
+                    case 'InTesting':
+                        return rand(0,1);
+                    case 'ForBuild':
+                        return rand(4,8);
+                    case 'InBuild':
+                        return rand(2,4);
+                    case 'BuildTesting':
+                    case 'ProdTesting':
+                        return rand(2,4);
+                    case 'Done':
+                        return rand(4,6);
+                    default:
+                        return null;
+                }
+            case 8: //32 hours
+                switch ($status) {
+                    case 'Autotesting':
+                        return rand(29,32);
+                    case 'InProgress':
+                    case 'ForReview':
+                    case 'InReview':
+                    case 'ForTesting':
+                    case 'InTesting':
+                        return rand(0,1);
+                    case 'ForBuild':
+                        return rand(3,6);
+                    case 'InBuild':
+                        return rand(2,4);
+                    case 'BuildTesting':
+                    case 'ProdTesting':
+                        return rand(2,4);
+                    case 'Done':
+                        return rand(4,6);
+                    default:
+                        return null;
+                }
+            case 5: //20 hours
+                switch ($status) {
+                    case 'Autotesting':
+                        return rand(17,20);
+                    case 'InProgress':
+                    case 'ForReview':
+                    case 'InReview':
+                    case 'ForTesting':
+                    case 'InTesting':
+                        return rand(0,1);
+                    case 'ForBuild':
+                        return rand(2,4);
+                    case 'InBuild':
+                        return rand(2,4);
+                    case 'BuildTesting':
+                    case 'ProdTesting':
+                        return rand(2,4);
+                    case 'Done':
+                        return rand(4,6);
+                    default:
+                        return null;
+                }
+            case 3: //12 hours
+                switch ($status) {
+                    case 'Autotesting':
+                        return rand(9,12);
+                    case 'InProgress':
+                    case 'ForReview':
+                    case 'InReview':
+                    case 'ForTesting':
+                    case 'InTesting':
+                        return rand(0,1);
+                    case 'ForBuild':
+                        return rand(1,3);
+                    case 'InBuild':
+                        return rand(2,4);
+                    case 'BuildTesting':
+                    case 'ProdTesting':
+                        return rand(2,4);
+                    case 'Done':
+                        return rand(4,6);
+                    default:
+                        return null;
+                }
+            case 2: //8 hours
+                switch ($status) {
+                    case 'Autotesting':
+                        return rand(5,8);
+                    case 'InProgress':
+                    case 'ForReview':
+                    case 'InReview':
+                    case 'ForTesting':
+                    case 'InTesting':
+                        return rand(0,1);
+                    case 'ForBuild':
+                        return rand(1,2);
+                    case 'InBuild':
+                        return rand(2,4);
+                    case 'BuildTesting':
+                    case 'ProdTesting':
+                        return rand(2,4);
+                    case 'Done':
+                        return rand(4,6);
+                    default:
+                        return null;
+                }
+            case 1:
+            default: //4 hours
+                switch ($status) {
+                    case 'Autotesting':
+                        return rand(1,4);
+                    case 'InProgress':
+                    case 'ForReview':
+                    case 'InReview':
+                    case 'ForTesting':
+                    case 'InTesting':
+                        return rand(0,1);
+                    case 'ForBuild':
+                        return rand(1,2);
+                    case 'InBuild':
+                        return rand(2,4);
+                    case 'BuildTesting':
+                    case 'ProdTesting':
+                        return rand(2,4);
+                    case 'Done':
+                        return rand(4,6);
+                    default:
+                        return null;
+                }
+        }
     }
 
     /**
-     * @param int $sp
+     * @param int $taskStoryPoints
+     * @param string $statusTo
+     * @return int
+     */
+    private function getStatusesHours(int $taskStoryPoints, string $statusTo)
+    {
+    }
+
+    /**
+     * @param int $hours
+     * @param $taskStartedAt
      * @return string
      * @throws \Exception
      */
-    private function getTaskStartedAtForPoints(int $sp, $taskStartedAt): string
+    private function getStatusEnd(int $hours, $taskStartedAt): string
     {
-        switch ($sp) {
-            case 13:
-                $hours = 52;
-                break;
-            case 8:
-                $hours = 32;
-                break;
-            case 5:
-                $hours = 20;
-                break;
-            case 3:
-                $hours = 12;
-                break;
-            case 2:
-                $hours = 8;
-                break;
-            case 1:
-            default:
-                $hours = 4;
-                break;
-        }
-
         $start = new DateTime($taskStartedAt);
 
         foreach (range(0,500) as $tryHours) {
@@ -192,6 +327,17 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
+     * @param string $sprintStartDate
+     * @return false|string
+     * @throws \Exception
+     */
+    private function getRandomTaskCreatedAt(string $sprintStartDate): string
+    {
+        $days = random_int(1, 60);
+        return date('Y-m-d H:i:s', strtotime('-' . $days . ' day', strtotime($sprintStartDate)));
+    }
+
+    /**
      * @return string[]
      */
     private function getTaskStatuses(): array
@@ -200,7 +346,7 @@ class DatabaseSeeder extends Seeder
         // -> ForTesting -> InTesting -> ForBuild -> InBuild -> BuildTesting -> ProdTesting -> Done
         return [
 //            'Backlog',
-            'Todo',
+//            'Todo',
 //            'Blocked',
             'InProgress',
             'Autotesting',
@@ -301,7 +447,7 @@ class DatabaseSeeder extends Seeder
             'marge',
             'maggie',
             'homer',
-            'lisa',
+//            'lisa',//qa
         ];
     }
 

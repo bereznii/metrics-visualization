@@ -44,8 +44,7 @@ class CreateMetricsTable extends Migration
             $table->string('author_email')->nullable(); //user.emailAddress
             $table->string('author_url')->nullable(); //user.self
             $table->string('author_key')->nullable(); //user.key
-            $table->dateTime('timestamp')->nullable(); //timestamp
-            $table->timestamps();
+            $table->integer('timestamp')->nullable(); //timestamp
         });
     }
 
