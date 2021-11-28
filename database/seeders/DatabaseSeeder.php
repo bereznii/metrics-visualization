@@ -284,7 +284,7 @@ class DatabaseSeeder extends Seeder
                     case 'ProdTesting':
                         return rand(2,4);
                     case 'Done':
-                        return rand(4,6);
+                        return rand(2,4);
                     default:
                         return null;
                 }
@@ -304,9 +304,9 @@ class DatabaseSeeder extends Seeder
                         return rand(2,4);
                     case 'BuildTesting':
                     case 'ProdTesting':
-                        return rand(2,4);
+                        return rand(1,3);
                     case 'Done':
-                        return rand(4,6);
+                        return rand(1,3);
                     default:
                         return null;
                 }
@@ -323,12 +323,12 @@ class DatabaseSeeder extends Seeder
                     case 'ForBuild':
                         return rand(1,2);
                     case 'InBuild':
-                        return rand(2,4);
+                        return rand(1,4);
                     case 'BuildTesting':
                     case 'ProdTesting':
-                        return rand(2,4);
+                        return rand(1,2);
                     case 'Done':
-                        return rand(4,6);
+                        return rand(1,2);
                     default:
                         return null;
                 }
@@ -346,12 +346,12 @@ class DatabaseSeeder extends Seeder
                     case 'ForBuild':
                         return rand(1,2);
                     case 'InBuild':
-                        return rand(2,4);
+                        return rand(1,3);
                     case 'BuildTesting':
                     case 'ProdTesting':
-                        return rand(2,4);
+                        return rand(1,3);
                     case 'Done':
-                        return rand(4,6);
+                        return rand(1,2);
                     default:
                         return null;
                 }
@@ -422,9 +422,8 @@ class DatabaseSeeder extends Seeder
         $randomKey = random_int(0,count($possibleOptions)-1);
         $randomOption = $possibleOptions[$randomKey];
 
-        if (random_int(0,8) === 0) {
+        if (random_int(0,7) === 0) {
             $randomOption[] = 100;
-            dump('bug');
         }
 
         return $randomOption;
