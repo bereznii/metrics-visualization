@@ -22,6 +22,28 @@
 
                 @include("partials.page-title")
 
+                <div class="row align-items-end">
+                    <div class="col-xl-3">
+                        <div>
+                            <label for="example-date-input" class="form-label">Дата від</label>
+                            <input class="form-control" type="date" value="2021-06-29" id="example-date-input">
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div>
+                            <label for="example-date-input" class="form-label">Дата до</label>
+                            <input class="form-control" type="date" value="2021-11-29" id="example-date-input">
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="mt-2 visible-xs">
+                            <button type="submit" class="btn btn-primary w-md">Застосувати</button>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="card">
@@ -42,7 +64,7 @@
                             </div>
                             <div class="card-body">
 
-                                <div id="line_chart_dashed" data-colors='["#5156be", "#fd625e", "#2ab57d"]' class="apex-charts" dir="ltr"></div>
+                                <div id="line_chart_dashed" data-colors='["#339966"]' class="apex-charts" dir="ltr"></div>
                             </div>
                         </div><!--end card-->
                     </div>
@@ -56,7 +78,7 @@
                                 <h4 class="card-title mb-0">Тривалість перебування задач у статусах</h4>
                             </div>
                             <div class="card-body">
-                                <div id="spline_area" data-colors='["#5156be", "#2ab57d"]' class="apex-charts" dir="ltr"></div>
+                                <div id="spline_area" data-colors='["#009999"]' class="apex-charts" dir="ltr"></div>
                             </div>
                         </div><!--end card-->
                     </div>
@@ -78,7 +100,7 @@
                     <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title mb-0">Column with Data Labels</h4>
+                                <h4 class="card-title mb-0">Швидкість команди</h4>
                             </div>
                             <div class="card-body">
                                 <div id="column_chart_datalabel" data-colors='["#5156be"]' class="apex-charts" dir="ltr"></div>
@@ -88,7 +110,7 @@
                     <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title mb-0">Швидкість команди</h4>
+                                <h4 class="card-title mb-0">Середня доля багів</h4>
                             </div>
                             <div class="card-body">
                                 <div id="bar_chart" data-colors='["#2ab57d"]' class="apex-charts" dir="ltr"></div>
@@ -102,7 +124,7 @@
                     <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title mb-0">Середня долю багів</h4>
+                                <h4 class="card-title mb-0">Тривалість життя багів</h4>
                             </div>
                             <div class="card-body">
                                 <div id="mixed_chart" data-colors='["#fd625e", "#5156be", "#2ab57d"]' class="apex-charts" dir="ltr"></div>
@@ -112,42 +134,16 @@
                     <div class="col-xl-6">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title mb-0">Radial Chart</h4>
+                                <h4 class="card-title mb-0">Кількість переводів в статус ToDo з різних статусів
+
+                                </h4>
                             </div>
                             <div class="card-body">
-                                <div id="radial_chart" data-colors='["#5156be", "#2ab57d", "#fd625e", "#ffbf53"]' class="apex-charts" dir="ltr"></div>
+                                <div id="radial_chart" data-colors='["#ff9900"]' class="apex-charts" dir="ltr"></div>
                             </div>
                         </div><!--end card-->
 
                     </div>
-                </div>
-                <!-- end row -->
-
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title mb-0">Тривалість життя багів</h4>
-                            </div>
-                            <div class="card-body">
-
-                                <div id="pie_chart" data-colors='["#2ab57d", "#5156be", "#fd625e", "#4ba6ef", "#ffbf53"]' class="apex-charts" dir="ltr"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end col -->
-
-                    <div class="col-xl-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title mb-0">Кількість перевідкриття задач з різних статусів</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="donut_chart" data-colors='["#2ab57d", "#5156be", "#fd625e", "#4ba6ef", "#ffbf53"]' class="apex-charts"  dir="ltr"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end col -->
                 </div>
                 <!-- end row -->
 

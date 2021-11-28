@@ -3,7 +3,7 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
+                <a href="javascript: void(0);" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="assets/images/logo-sm.svg" alt="" height="24">
                     </span>
@@ -12,7 +12,7 @@
                     </span>
                 </a>
 
-                <a href="index.html" class="logo logo-light">
+                <a href="javascript: void(0);" class="logo logo-light">
                     <span class="logo-sm">
                         <img src="assets/images/logo-sm.svg" alt="" height="24">
                     </span>
@@ -271,7 +271,7 @@
                 <ul class="navbar-nav">
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle arrow-none" href="index.html" id="topnav-dashboard" role="button">
+                        <a class="nav-link dropdown-toggle arrow-none" href="javascript: void(0);" id="topnav-dashboard" role="button">
                             <i data-feather="home"></i><span data-key="t-dashboards">Dashboard</span>
                         </a>
                     </li>

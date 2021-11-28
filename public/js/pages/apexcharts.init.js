@@ -111,7 +111,7 @@ function getChartColorsArray(chartId) {
 //
 // chart.render();
 
-//   spline_area
+// Середня доля розробки і доставки
 var splneAreaColors = getChartColorsArray("#line_chart_datalabel");
 var options = {
     chart: {
@@ -130,169 +130,46 @@ var options = {
     },
     series: [{
         name: 'Розробка',
-        data: [262, 267, 269, 276, 274, 280, 268, 270, 265]
+        data: [262, 267, 269, 276, 274, 280, 268, 270, 265, 259, 268]
     }, {
         name: 'Доставка',
-        data: [246, 202, 245, 283, 304, 283, 230, 216, 214]
+        data: [246, 202, 245, 283, 304, 283, 230, 216, 214, 160, 255]
     }],
     colors: splneAreaColors,
+    yaxis: {
+        title: {
+            text: 'Години'
+        },
+    },
     xaxis: {
-        type: 'string',
-        categories: ["MV Release 1.0", "MV Release 1.1", "MV Release 1.2", "MV Release 1.3", "MV Release 1.4", "MV Release 1.5", "MV Release 1.6", "MV Release 1.7", "MV Release 1.8", "MV Release 1.9", "MV Release 1.10"],
+        title: {
+            text: 'Спринти'
+        },
+        categories: [
+            "MV Release 1.0",
+            "MV Release 1.1",
+            "MV Release 1.2",
+            "MV Release 1.3",
+            "MV Release 1.4",
+            "MV Release 1.5",
+            "MV Release 1.6",
+            "MV Release 1.7",
+            "MV Release 1.8",
+            "MV Release 1.9",
+            "MV Release 1.10"],
     },
     grid: {
         borderColor: '#f1f1f1',
-    },
-    tooltip: {
-        x: {
-            format: 'dd/MM/yy HH:mm'
-        },
     }
 }
-
 var chart = new ApexCharts(
     document.querySelector("#line_chart_datalabel"),
     options
 );
-
 chart.render();
 
-
-//  line chart datalabel
-var lineDashedColors = getChartColorsArray("#line_chart_dashed");
-var options = {
-    chart: {
-      height: 380,
-      type: 'line',
-      zoom: {
-        enabled: false
-      },
-      toolbar: {
-        show: false,
-    }
-    },
-    colors: lineDashedColors,
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      width: [3, 4, 3],
-      curve: 'straight',
-      dashArray: [0, 8, 5]
-    },
-    series: [{
-        name: "Session Duration",
-        data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
-      },
-      {
-        name: "Page Views",
-        data: [36, 42, 60, 42, 13, 18, 29, 37, 36, 51, 32, 35]
-      },
-      {
-        name: 'Total Visits',
-        data: [89, 56, 74, 98, 72, 38, 64, 46, 84, 58, 46, 49]
-      }
-    ],
-    title: {
-      text: 'Page Statistics',
-      align: 'left',
-      style: {
-        fontWeight:  '500',
-      },
-    },
-    markers: {
-      size: 0,
-
-      hover: {
-        sizeOffset: 6
-      }
-    },
-    xaxis: {
-      categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan',
-        '10 Jan', '11 Jan', '12 Jan'
-      ],
-    },
-    tooltip: {
-      y: [{
-        title: {
-          formatter: function (val) {
-            return val + " (mins)"
-          }
-        }
-      }, {
-        title: {
-          formatter: function (val) {
-            return val + " per session"
-          }
-        }
-      }, {
-        title: {
-          formatter: function (val) {
-            return val;
-          }
-        }
-      }]
-    },
-    grid: {
-      borderColor: '#f1f1f1',
-    }
-}
-
-var chart = new ApexCharts(
-document.querySelector("#line_chart_dashed"),
-options
-);
-
-chart.render();
-
-//   spline_area
-var splneAreaColors = getChartColorsArray("#spline_area");
-var options = {
-    chart: {
-        height: 350,
-        type: 'area',
-        toolbar: {
-            show: false,
-        }
-    },
-    dataLabels: {
-        enabled: false
-    },
-    stroke: {
-        curve: 'smooth',
-        width: 3,
-    },
-    series: [{
-        name: 'series1',
-        data: [34, 40, 28, 52, 42, 109, 100]
-    }, {
-        name: 'series2',
-        data: [32, 60, 34, 46, 34, 52, 41]
-    }],
-    colors: splneAreaColors,
-    xaxis: {
-        type: 'datetime',
-        categories: ["2018-09-19T00:00:00", "2018-09-19T01:30:00", "2018-09-19T02:30:00", "2018-09-19T03:30:00", "2018-09-19T04:30:00", "2018-09-19T05:30:00", "2018-09-19T06:30:00"],
-    },
-    grid: {
-        borderColor: '#f1f1f1',
-    },
-    tooltip: {
-        x: {
-            format: 'dd/MM/yy HH:mm'
-        },
-    }
-}
-
-var chart = new ApexCharts(
-    document.querySelector("#spline_area"),
-    options
-);
-
-chart.render();
-
-// column chart
-var columnColors = getChartColorsArray("#column_chart");
+// Time-to-Market
+var barColors = getChartColorsArray("#line_chart_dashed");
 var options = {
     chart: {
         height: 350,
@@ -303,69 +180,176 @@ var options = {
     },
     plotOptions: {
         bar: {
-            horizontal: false,
-            columnWidth: '45%',
-        },
+            horizontal: true,
+        }
     },
     dataLabels: {
         enabled: false
     },
-    stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-    },
     series: [{
-        name: 'Net Profit',
-        data: [46, 57, 59, 54, 62, 58, 64, 60, 66]
-    }, {
-        name: 'Revenue',
-        data: [74, 83, 102, 97, 86, 106, 93, 114, 94]
-    }, {
-        name: 'Free Cash Flow',
-        data: [37, 42, 38, 26, 47, 50, 54, 55, 43]
+        data: [20.8377, 24.8944, 28.6916, 38.4304, 51.7222, 73.1667]
     }],
-    colors: columnColors,
-    xaxis: {
-        categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-    },
-    yaxis: {
-        title: {
-            text: '$ (thousands)',
-            style: {
-                fontWeight:  '500',
-              },
-        }
-    },
+    colors: barColors,
     grid: {
         borderColor: '#f1f1f1',
     },
-    fill: {
-        opacity: 1
-
-    },
-    tooltip: {
-        y: {
-            formatter: function (val) {
-                return "$ " + val + " thousands"
-            }
+    xaxis: {
+        categories: [
+            '1 Story Point',
+            '2 Story Point',
+            '3 Story Point',
+            '5 Story Point',
+            '8 Story Point',
+            '13 Story Point',
+        ],
+        title: {
+            text: 'Годин в середньому'
         }
     }
 }
+var chart = new ApexCharts(
+    document.querySelector("#line_chart_dashed"),
+    options
+);
+chart.render();
 
+// Тривалість перебування задач у статусах
+var barColors = getChartColorsArray("#spline_area");
+var options = {
+    chart: {
+        height: 380,
+        type: 'bar',
+        toolbar: {
+            show: false,
+        }
+    },
+    plotOptions: {
+        bar: {
+            horizontal: true,
+        }
+    },
+    dataLabels: {
+        enabled: false
+    },
+    series: [{
+        data: [0.5162,10.8432,0.5233,0.4658,0.4932,0.5439,2.1928,3.0227,3.0487,3.0032,4.9497]
+    }],
+    colors: barColors,
+    grid: {
+        borderColor: '#f1f1f1',
+    },
+    yaxis: {
+        title: {
+            text: 'Статуси задач'
+        }
+    },
+    xaxis: {
+        categories: [
+            'ToDo',
+            'InProgress',
+            'Autotesting',
+            'ForReview',
+            'InReview',
+            'ForTesting',
+            'InTesting',
+            'ForBuild',
+            'InBuild',
+            'BuildTesting',
+            'ProdTesting',
+        ],
+        title: {
+            text: 'Годин в середньому'
+        }
+    }
+}
+var chart = new ApexCharts(
+    document.querySelector("#spline_area"),
+    options
+);
+chart.render();
+
+// Частота змін опису задач після початку спринта
+var lineDatalabelColors = getChartColorsArray("#column_chart");
+var options = {
+    chart: {
+      height: 380,
+      type: 'line',
+      zoom: {
+        enabled: false
+      },
+      toolbar: {
+        show: false
+      }
+    },
+    colors: lineDatalabelColors,
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      width: [3, 3],
+      curve: 'smooth'
+    },
+    series: [{
+      name: "Задач зі зміненим описом",
+      data: [3, 0, 5, 1, 5, 2, 2, 1, 1, 0, 3]
+    }
+    ],
+    grid: {
+      row: {
+        colors: ['transparent', 'transparent'], // takes an array which will be repeated on columns
+        opacity: 0.2
+      },
+      borderColor: '#f1f1f1'
+    },
+    markers: {
+      style: 'inverted',
+      size: 0
+    },
+    xaxis: {
+      categories: ['MV Release 1.0', 'MV Release 1.1', 'MV Release 1.2', 'MV Release 1.3', 'MV Release 1.4', 'MV Release 1.5', 'MV Release 1.6', 'MV Release 1.7', 'MV Release 1.8', 'MV Release 1.9', 'MV Release 1.10'],
+      title: {
+        text: 'Спринти'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Кількість задач'
+      },
+      min: 0,
+      max: 20
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'right',
+      floating: true,
+      offsetY: -25,
+      offsetX: -5
+    },
+    responsive: [{
+      breakpoint: 600,
+      options: {
+        chart: {
+          toolbar: {
+            show: false
+          }
+        },
+        legend: {
+          show: false
+        },
+      }
+    }]
+}
 var chart = new ApexCharts(
     document.querySelector("#column_chart"),
     options
 );
-
 chart.render();
 
-
-// column chart with datalabels
+// Швидкість команди
 var columnDatalabelColors = getChartColorsArray("#column_chart_datalabel");
 var options = {
     chart: {
-        height: 350,
+        height: 380,
         type: 'bar',
         toolbar: {
             show: false,
@@ -382,7 +366,7 @@ var options = {
     dataLabels: {
         enabled: true,
         formatter: function (val) {
-            return val + "%";
+            return val;
         },
         offsetY: -22,
         style: {
@@ -391,20 +375,19 @@ var options = {
         }
     },
     series: [{
-        name: 'Inflation',
-        data: [2.5, 3.2, 5.0, 10.1, 4.2, 3.8, 3, 2.4, 4.0, 1.2, 3.5, 0.8]
+        name: 'Кількість Story Points',
+        data: [64, 64, 65, 64, 65, 65, 63, 64, 62, 62, 63]
     }],
     colors: columnDatalabelColors,
     grid: {
         borderColor: '#f1f1f1',
     },
     xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        position: 'top',
-        labels: {
-            offsetY: -18,
-
+        title: {
+            text: 'Спринти'
         },
+        categories: ["MV Release 1.0", "MV Release 1.1", "MV Release 1.2", "MV Release 1.3", "MV Release 1.4", "MV Release 1.5", "MV Release 1.6", "MV Release 1.7", "MV Release 1.8", "MV Release 1.9", "MV Release 1.10"],
+        position: 'bottom',
         axisBorder: {
             show: false
         },
@@ -428,7 +411,6 @@ var options = {
             offsetY: -35,
         }
     },
-
     yaxis: {
         axisBorder: {
             show: false
@@ -444,32 +426,171 @@ var options = {
         }
 
     },
-    title: {
-        text: 'Monthly Inflation in Argentina, 2002',
-        floating: true,
-        offsetY: 330,
-        align: 'center',
-        style: {
-            color: '#444',
-            fontWeight:  '500',
-        }
-    },
 }
-
 var chart = new ApexCharts(
     document.querySelector("#column_chart_datalabel"),
     options
 );
+chart.render();
 
+// Середня доля багів
+var lineDatalabelColors = getChartColorsArray("#bar_chart");
+var options = {
+    chart: {
+        height: 380,
+        type: 'line',
+        zoom: {
+            enabled: false
+        },
+        toolbar: {
+            show: false
+        }
+    },
+    colors: lineDatalabelColors,
+    dataLabels: {
+        enabled: false,
+    },
+    stroke: {
+        width: [3, 3],
+        curve: 'smooth'
+    },
+    series: [{
+        name: "Задач зі зміненим описом",
+        data: [0.0000, 0.0000, 4.7619, 0.0000, 4.0000, 4.1667, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]
+    }
+    ],
+    grid: {
+        row: {
+            colors: ['transparent', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.2
+        },
+        borderColor: '#f1f1f1'
+    },
+    markers: {
+        style: 'inverted',
+        size: 0
+    },
+    xaxis: {
+        categories: ['MV Release 1.0', 'MV Release 1.1', 'MV Release 1.2', 'MV Release 1.3', 'MV Release 1.4', 'MV Release 1.5', 'MV Release 1.6', 'MV Release 1.7', 'MV Release 1.8', 'MV Release 1.9', 'MV Release 1.10'],
+        title: {
+            text: 'Спринти'
+        }
+    },
+    yaxis: {
+        title: {
+            text: 'Відсоток багів відносно кількості задач'
+        },
+        min: 0,
+        max: 7
+    },
+    legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        floating: true,
+        offsetY: -25,
+        offsetX: -5
+    },
+    responsive: [{
+        breakpoint: 600,
+        options: {
+            chart: {
+                toolbar: {
+                    show: false
+                }
+            },
+            legend: {
+                show: false
+            },
+        }
+    }]
+}
+var chart = new ApexCharts(
+    document.querySelector("#bar_chart"),
+    options
+);
+chart.render();
+
+// Тривалість життя багів
+var lineDatalabelColors = getChartColorsArray("#mixed_chart");
+var options = {
+    chart: {
+        height: 380,
+        type: 'line',
+        zoom: {
+            enabled: false
+        },
+        toolbar: {
+            show: false
+        }
+    },
+    colors: lineDatalabelColors,
+    dataLabels: {
+        enabled: false,
+    },
+    stroke: {
+        width: [3, 3],
+        curve: 'smooth'
+    },
+    series: [{
+        name: "Час життя багів в годинах",
+        data: [19, 21, 21, 24, 21, 17, 26, 19, 22, 21, 23, 22, 20]
+    }
+    ],
+    grid: {
+        row: {
+            colors: ['transparent', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.2
+        },
+        borderColor: '#f1f1f1'
+    },
+    markers: {
+        style: 'inverted',
+        size: 0
+    },
+    xaxis: {
+        categories: ['MV-54', 'MV-107', 'MV-118', 'MV-265', 'MV-295', 'MV-341', 'MV-427', 'MV-454', 'MV-469', 'MV-478', 'MV-491', 'MV-500', 'MV-582'],
+        title: {
+            text: 'Баги'
+        }
+    },
+    yaxis: {
+        title: {
+            text: 'Відсоток багів відносно кількості задач'
+        }
+    },
+    legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        floating: true,
+        offsetY: -25,
+        offsetX: -5
+    },
+    responsive: [{
+        breakpoint: 600,
+        options: {
+            chart: {
+                toolbar: {
+                    show: false
+                }
+            },
+            legend: {
+                show: false
+            },
+        }
+    }]
+}
+var chart = new ApexCharts(
+    document.querySelector("#mixed_chart"),
+    options
+);
 chart.render();
 
 
-
-// Bar chart
-var barColors = getChartColorsArray("#bar_chart");
+// Кількість переводів в статус ToDo з різних статусів
+var columnDatalabelColors = getChartColorsArray("#radial_chart");
 var options = {
     chart: {
-        height: 350,
+        height: 380,
         type: 'bar',
         toolbar: {
             show: false,
@@ -477,235 +598,66 @@ var options = {
     },
     plotOptions: {
         bar: {
-            horizontal: true,
+            borderRadius: 10,
+            dataLabels: {
+                position: 'top', // top, center, bottom
+            },
         }
     },
     dataLabels: {
-        enabled: false
+        enabled: true,
+        formatter: function (val) {
+            return val;
+        },
+        offsetY: -22,
+        style: {
+            fontSize: '12px',
+            colors: ["#304758"]
+        }
     },
     series: [{
-        data: [380, 430, 450, 475, 550, 584, 780, 1100, 1220, 1365]
+        name: 'Кількість перевідкритих задач',
+        data: [0, 0, 0, 0, 2, 0, 0, 1, 0, 2, 2]
     }],
-    colors: barColors,
+    colors: columnDatalabelColors,
     grid: {
         borderColor: '#f1f1f1',
     },
     xaxis: {
-        categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan', 'United States', 'China', 'Germany'],
-    }
-}
-
-var chart = new ApexCharts(
-    document.querySelector("#bar_chart"),
-    options
-);
-
-chart.render();
-
-
-// Mixed chart
-var mixedColors = getChartColorsArray("#mixed_chart");
-var options = {
-    chart: {
-        height: 350,
-        type: 'line',
-        stacked: false,
-        toolbar: {
+        title: {
+            text: 'Спринти'
+        },
+        categories: ["MV Release 1.0", "MV Release 1.1", "MV Release 1.2", "MV Release 1.3", "MV Release 1.4", "MV Release 1.5", "MV Release 1.6", "MV Release 1.7", "MV Release 1.8", "MV Release 1.9", "MV Release 1.10"],
+        position: 'bottom',
+        axisBorder: {
             show: false
+        },
+        axisTicks: {
+            show: false
+        },
+        tooltip: {
+            enabled: true,
+            offsetY: -35,
         }
-    },
-    stroke: {
-        width: [0, 2, 4],
-        curve: 'smooth'
-    },
-    plotOptions: {
-        bar: {
-            columnWidth: '50%'
-        }
-    },
-    colors: mixedColors,
-    series: [{
-        name: 'Team A',
-        type: 'column',
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
-    }, {
-        name: 'Team B',
-        type: 'area',
-        data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
-    }, {
-        name: 'Team C',
-        type: 'line',
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
-    }],
-    fill: {
-        opacity: [0.85, 0.25, 1],
-        gradient: {
-            inverseColors: false,
-            shade: 'light',
-            type: "vertical",
-            opacityFrom: 0.85,
-            opacityTo: 0.55,
-            stops: [0, 100, 100, 100]
-        }
-    },
-    labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003', '08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'],
-    markers: {
-        size: 0
-    },
-    xaxis: {
-        type: 'datetime'
     },
     yaxis: {
-        title: {
-            text: 'Points',
+        axisBorder: {
+            show: false
         },
-    },
-    tooltip: {
-        shared: true,
-        intersect: false,
-        y: {
-            formatter: function (y) {
-                if (typeof y !== "undefined") {
-                    return y.toFixed(0) + " points";
-                }
-                return y;
-
+        axisTicks: {
+            show: false,
+        },
+        labels: {
+            show: false,
+            formatter: function (val) {
+                return val + "%";
             }
         }
+
     },
-    grid: {
-        borderColor: '#f1f1f1'
-    }
-  }
-
-  var chart = new ApexCharts(
-    document.querySelector("#mixed_chart"),
-    options
-  );
-
-  chart.render();
-
-
-//  Radial chart
-var radialColors = getChartColorsArray("#radial_chart");
-var options = {
-    chart: {
-        height: 370,
-        type: 'radialBar',
-    },
-    plotOptions: {
-        radialBar: {
-            dataLabels: {
-                name: {
-                    fontSize: '22px',
-                },
-                value: {
-                    fontSize: '16px',
-                },
-                total: {
-                    show: true,
-                    label: 'Total',
-                    formatter: function (w) {
-                        // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                        return 249
-                    }
-                },
-                dropShadow: {
-                    enabled: false,
-                }
-            }
-        }
-    },
-    series: [44, 55, 67, 83],
-    labels: ['Computer', 'Tablet', 'Laptop', 'Mobile'],
-    colors: radialColors,
 }
-
 var chart = new ApexCharts(
     document.querySelector("#radial_chart"),
     options
 );
-
-chart.render();
-
-
-// pie chart
-var pieColors = getChartColorsArray("#pie_chart");
-var options = {
-  chart: {
-      height: 320,
-      type: 'pie',
-  },
-  series: [44, 55, 41, 17, 15],
-  labels: ['Series 1', 'Series 2', 'Series 3', 'Series 4', 'Series 5'],
-  colors: pieColors,
-  legend: {
-      show: true,
-      position: 'bottom',
-      horizontalAlign: 'center',
-      verticalAlign: 'middle',
-      floating: false,
-      fontSize: '14px',
-      offsetX: 0,
-  },
-  responsive: [{
-      breakpoint: 600,
-      options: {
-          chart: {
-              height: 240
-          },
-          legend: {
-              show: false
-          },
-      }
-  }]
-
-}
-
-var chart = new ApexCharts(
-  document.querySelector("#pie_chart"),
-  options
-);
-
-chart.render();
-
-
-// Donut chart
-var donutColors = getChartColorsArray("#donut_chart");
-var options = {
-  chart: {
-      height: 320,
-      type: 'donut',
-  },
-  series: [44, 55, 41, 17, 15],
-  labels: ['Series 1', 'Series 2', 'Series 3', 'Series 4', 'Series 5'],
-  colors: donutColors,
-  legend: {
-      show: true,
-      position: 'bottom',
-      horizontalAlign: 'center',
-      verticalAlign: 'middle',
-      floating: false,
-      fontSize: '14px',
-      offsetX: 0,
-  },
-  responsive: [{
-      breakpoint: 600,
-      options: {
-          chart: {
-              height: 240
-          },
-          legend: {
-              show: false
-          },
-      }
-  }]
-
-}
-
-var chart = new ApexCharts(
-  document.querySelector("#donut_chart"),
-  options
-);
-
 chart.render();
