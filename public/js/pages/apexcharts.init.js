@@ -166,9 +166,6 @@ $(document).ready(function () {
         chart: {
             height: 380,
             type: 'line',
-            zoom: {
-                enabled: false
-            },
             toolbar: {
                 show: false
             }
@@ -332,9 +329,6 @@ $(document).ready(function () {
         chart: {
             height: 380,
             type: 'line',
-            zoom: {
-                enabled: false
-            },
             toolbar: {
                 show: false
             }
@@ -410,9 +404,6 @@ $(document).ready(function () {
         chart: {
             height: 380,
             type: 'line',
-            zoom: {
-                enabled: false
-            },
             toolbar: {
                 show: false
             }
