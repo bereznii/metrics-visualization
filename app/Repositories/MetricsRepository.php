@@ -113,9 +113,9 @@ class MetricsRepository
                            COUNT(*) count_summary_change
                        FROM tasks
                        WHERE changed_field = 'issuesummary'
-                        && sprint_started_at BETWEEN ? AND ?
                        GROUP BY sprint_key) t2
             ON tasks.sprint_key = t2.sprint_key
+            WHERE sprint_started_at BETWEEN ? AND ?
             GROUP BY sprint_key, t2.count_summary_change;
         ", array_values($dates));
 
@@ -190,7 +190,7 @@ class MetricsRepository
                        WHERE changed_field = 'issuestatus' && changed_from like 'ToDo'
                        GROUP BY sprint_key) t3
                    ON tasks.sprint_key = t3.sprint_key
-            && sprint_started_at BETWEEN ? AND ?
+            WHERE sprint_started_at BETWEEN ? AND ?
             GROUP BY sprint_key, t2.count_bugs, t3.count_tasks;
         ", array_values($dates));
 
@@ -250,9 +250,9 @@ class MetricsRepository
                     COUNT(*) count_reopens
                 FROM tasks
                 WHERE changed_to = 'ToDo'
-                && sprint_started_at BETWEEN ? AND ?
                 GROUP BY sprint_key) t2
             ON tasks.sprint_key = t2.sprint_key
+            WHERE sprint_started_at BETWEEN ? AND ?
             GROUP BY sprint_key, t2.count_reopens;
         ", array_values($dates));
 

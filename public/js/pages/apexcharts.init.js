@@ -104,7 +104,7 @@ $(document).ready(function () {
     TimeToMarketChart.render();
 
 
-// Тривалість перебування задач у статусах
+    // Тривалість перебування задач у статусах
     var TasksInStatusesTimeColors = getChartColorsArray("#spline_area");
     var TasksInStatusesTimeOptions = {
         chart: {
@@ -237,7 +237,7 @@ $(document).ready(function () {
     DescriptionChangeChart.render();
 
 
-// Швидкість команди
+    // Швидкість команди
     var TeamSpeedColors = getChartColorsArray("#column_chart_datalabel");
     var TeamSpeedOptions = {
         chart: {
@@ -326,7 +326,7 @@ $(document).ready(function () {
     TeamSpeedChart.render();
 
 
-// Середня доля багів
+    // Середня доля багів
     var AverageBugPercentageColors = getChartColorsArray("#bar_chart");
     var AverageBugPercentageoptions = {
         chart: {
@@ -404,7 +404,7 @@ $(document).ready(function () {
     AverageBugPercentagechart.render();
 
 
-// Тривалість життя багів
+    // Тривалість життя багів
     var BugLifetimeColors = getChartColorsArray("#mixed_chart");
     var BugLifetimeoptions = {
         chart: {
@@ -479,7 +479,7 @@ $(document).ready(function () {
     BugLifetimechart.render();
 
 
-// Кількість переводів в статус ToDo з різних статусів
+    // Кількість переводів в статус ToDo з різних статусів
     var TodoColors = getChartColorsArray("#radial_chart");
     var Todooptions = {
         chart: {
